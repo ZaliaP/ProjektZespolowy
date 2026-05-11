@@ -80,6 +80,18 @@ input[type="radio"]:checked::before {
   flex: 1;
 }
 
+.dropdown-control {
+  position: relative;
+}
+
+.control-trigger {
+  border: none;
+  background: transparent;
+  padding: 0;
+  font: inherit;
+  color: inherit;
+}
+
 .passengers-select {
   display: flex;
   align-items: center;
@@ -103,10 +115,70 @@ input[type="radio"]:checked::before {
   height: 12px;
   margin-left: 0.25rem;
   opacity: 0.6;
+  transition: transform 0.2s ease;
+}
+
+.dropdown-svg-icon.open {
+  transform: rotate(180deg);
 }
 
 .passengers-select, .class-select {
   cursor: pointer;
+}
+
+.dropdown-panel {
+  position: absolute;
+  top: calc(100% + 0.65rem);
+  right: 0;
+  min-width: 220px;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.9rem;
+  box-shadow: 0 16px 30px rgba(15, 23, 42, 0.12);
+  padding: 0.85rem;
+  z-index: 30;
+}
+
+.dropdown-counter-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  font-size: 0.92rem;
+}
+
+.counter-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.counter-controls button {
+  width: 32px;
+  height: 32px;
+  border: 1px solid #cbd5e1;
+  border-radius: 999px;
+  background: #fff;
+  color: #0f172a;
+  cursor: pointer;
+}
+
+.dropdown-option {
+  width: 100%;
+  border: none;
+  background: transparent;
+  text-align: left;
+  padding: 0.75rem 0.8rem;
+  border-radius: 0.7rem;
+  color: #334155;
+  cursor: pointer;
+  font-size: 0.92rem;
+}
+
+.dropdown-option:hover,
+.dropdown-option.active {
+  background: #eff6ff;
+  color: #1d4ed8;
 }
 
 .search-inputs {
@@ -193,4 +265,122 @@ input[type="radio"]:checked::before {
 
 .search-btn:hover {
   background-color: #2563eb;
+}
+
+.search-feedback {
+  margin: 0.9rem 0 0;
+  font-size: 0.92rem;
+  font-weight: 500;
+}
+
+.search-feedback-error {
+  color: #dc2626;
+}
+
+.recent-searches {
+  margin-top: 1.25rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(148, 163, 184, 0.24);
+}
+
+.recent-searches-label {
+  margin: 0 0 0.75rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #475569;
+}
+
+.recent-searches-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.recent-search-chip {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.2rem;
+  padding: 0.75rem 0.95rem;
+  border: 1px solid #dbe3ef;
+  border-radius: 0.85rem;
+  background: rgba(255, 255, 255, 0.9);
+  color: #1f2937;
+  cursor: pointer;
+  transition: border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.recent-search-chip:hover {
+  border-color: #93c5fd;
+  transform: translateY(-1px);
+  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.08);
+}
+
+.recent-search-chip span {
+  font-size: 0.92rem;
+  font-weight: 600;
+}
+
+.recent-search-chip small {
+  font-size: 0.74rem;
+  color: #64748b;
+}
+
+.custom-date-input {
+  width: 100%;
+  border: none;
+  background: transparent;
+  outline: none;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 1rem;
+  color: #4b5563;
+}
+.custom-date-input::-webkit-calendar-picker-indicator {
+  display: block;
+  background: transparent;
+  bottom: 0;
+  color: transparent;
+  cursor: pointer;
+  height: 100%;
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 100%;
+}
+
+@media (max-width: 768px) {
+  .other-options {
+    width: 100%;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  .dropdown-control {
+    flex: 1;
+  }
+
+  .control-trigger {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .dropdown-panel {
+    left: 0;
+    right: auto;
+    min-width: 100%;
+  }
+
+  .search-box-bottom-row {
+    justify-content: stretch;
+  }
+
+  .search-btn {
+    width: 100%;
+  }
+
+  .recent-search-chip {
+    width: 100%;
+  }
 }

@@ -27,8 +27,12 @@
 
 .destination-card {
   background: white;
+  border: none;
   border-radius: 1rem;
   overflow: hidden;
+  padding: 0;
+  text-align: left;
+  width: 100%;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
   transition: transform 0.2s, box-shadow 0.2s;
   cursor: pointer;
@@ -37,6 +41,11 @@
 .destination-card:hover {
   transform: translateY(-5px);
   box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+}
+
+.destination-card:focus-visible {
+  outline: 3px solid rgba(59, 130, 246, 0.35);
+  outline-offset: 3px;
 }
 
 .card-image-wrapper {

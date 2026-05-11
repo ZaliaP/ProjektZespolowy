@@ -193,7 +193,6 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 54px;
     height: 54px;
     background: #2563EB;
     color: #fff;
@@ -204,6 +203,11 @@
     border-radius: 10px;
     cursor: pointer;
     flex-shrink: 0;
+}
+
+.submit-button:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
 }
 
 .diffrent-login-options {

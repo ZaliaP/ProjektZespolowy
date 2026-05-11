@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { useLocation, Link } from 'react-router-dom';
+import { useLocation, Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext';
+import { loginUser, registerUser } from '../../services/api';
 import './LoginSignup.css';
 
 import user_icon from '../asserts/person.svg';
@@ -11,14 +13,55 @@ import facebook_icon from '../asserts/icons/facebook.svg';
 
 const LoginSignup = () => {
   const location = useLocation();
+  const navigate = useNavigate();
+  const { login } = useAuth();
+  
   const defaultAction = location.state?.action || 'Logowanie';
   const [action, setAction] = useState(defaultAction);
+
+  // Form state
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    password: '',
+    confirmPassword: '',
+  });
+  
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     if (location.state?.action) {
       setAction(location.state.action);
     }
   }, [location.state]);
+
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
+    });
+  };
+
+  const handleSubmit = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      if (action === 'Logowanie') {
+        const response = await loginUser({ email: formData.email, password: formData.password });
+        login(response.token);
+        navigate('/');
+      } else {
+        await registerUser(formData);
+        setAction('Logowanie'); // Po udanej rejestracji zmień na logowanie
+        alert('Konto zostało utworzone. Możesz się teraz zalogować.');
+      }
+    } catch (err) {
+      setError(err?.response?.data?.message || 'Wystąpił błąd');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="container">
@@ -36,47 +79,50 @@ const LoginSignup = () => {
       </div>
 
       <div className="submit-container">
-            <div className={action==="Logowanie"?"submit gray":"submit"} onClick={() => {setAction('Logowanie')}}>Logowanie</div>
-            <div className={action==="Rejestracja"?"submit gray":"submit"} onClick={() => {setAction('Rejestracja')}}>Rejestracja</div>
+        <button type="button" className={action==="Logowanie"?"submit gray":"submit"} onClick={() => {setAction('Logowanie')}}>Logowanie</button>
+        <button type="button" className={action==="Rejestracja"?"submit gray":"submit"} onClick={() => {setAction('Rejestracja')}}>Rejestracja</button>
         </div>
 
         <div className={action === "Rejestracja" ? "inputs grid" : "inputs"}>
+          {error && <div className="error-message" style={{color: 'red', textAlign: 'center', marginBottom: '10px'}}>{error}</div>}
+          
           {action === "Rejestracja" &&
             <div className="input">
               <label>Imię i nazwisko</label>
               <div className="input-text">
                 <img src={user_icon} alt=""/>
-                <input type="text" placeholder="Jan Kowalski" />
+                <input type="text" name="name" value={formData.name} onChange={handleChange} placeholder="Jan Kowalski" />
               </div>
-          </div>}
-                
+            </div>
+          }
+          
           <div className="input">
             <label>E-mail</label>
-            <div className="input-text">
-              <img src={email_icon} alt=""/>
-              <input type="email" placeholder="twoj@email.com"/>
-            </div>  
-          </div> 
+              <div className="input-text">
+                <img src={email_icon} alt=""/>
+                <input type="email" name="email" value={formData.email} onChange={handleChange} placeholder="twoj@email.com" />
+              </div>
+          </div>
           
           <div className="input">
             <label>Hasło</label>
-            <div className="input-text">
-              <img src={password_icon} alt=""/>
-              <input type="password" placeholder={action === "Logowanie" ? "Wpisz hasło" : "Minimum 8 znaków"} />
-            </div>  
-          </div>  
-     
-          {action === "Logowanie"?<div></div>:                     
+              <div className="input-text">
+                <img src={password_icon} alt=""/>
+                <input type="password" name="password" value={formData.password} onChange={handleChange} placeholder={action === "Logowanie" ? "Wpisz hasło" : "Minimum 8 znaków"} />
+              </div>
+          </div>
+
+          {action !== "Logowanie" &&
             <div className="input">
               <label>Powtórz hasło</label>
               <div className="input-text">
-              <img src={password_icon} alt=""/>
-              <input type="password" placeholder="Wpisz ponownie" />
+                <img src={password_icon} alt=""/>
+                <input type="password" name="confirmPassword" value={formData.confirmPassword} onChange={handleChange} placeholder="Wpisz ponownie" />
               </div>
-            </div>}    
+            </div>}
         </div>
 
-        {action === "Rejestracja"?
+        {action === "Rejestracja" ? 
           <div className="terms-checkbox">
               <input type="checkbox" id="terms" />
               <label htmlFor="terms">Akceptuję <span>regulamin</span> oraz politykę <span>prywatności</span></label>
@@ -90,9 +136,9 @@ const LoginSignup = () => {
               <span className="forgot">Zapomniałeś hasła?</span>
         </div>}
 
-        <div className="submit-button">
-          {action === "Logowanie" ? "Zaloguj się" : "Utwórz konto"}
-        </div>
+        <button type="button" className="submit-button" onClick={handleSubmit} disabled={loading}>
+          {loading ? "Wczytywanie..." : (action === "Logowanie" ? "Zaloguj się" : "Utwórz konto")}
+        </button>
 
         <div className="diffrent-login-options">
           <div className="line"></div>
@@ -122,7 +168,6 @@ const LoginSignup = () => {
             <p>Masz już konto? <span onClick={() => setAction('Logowanie')}>Zaloguj się</span></p>
           )}
         </div>
-
     </div>
   );
 };
