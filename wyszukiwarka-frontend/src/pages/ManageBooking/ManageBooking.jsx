@@ -18,11 +18,14 @@ import DateChange from '../Home/components/Modal/DateChange';
 import BaggageSelect from '../Home/components/Modal/BaggageSelect';
 import SeatMap from '../Home/components/Modal/SeatMap';
 
+import { useNavigate } from 'react-router-dom';
+
 const ManageBooking = () => {
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
   const [modal, setModal] = useState(null);
   const [activeBooking, setActiveBooking] = useState(null);
+  const navigate = useNavigate();
 
   const handleCancel = (bookingId) => {
   setBookings(prev => prev.filter(b => b.id !== bookingId));
@@ -48,7 +51,7 @@ const ManageBooking = () => {
     setBookings(prev => prev.map(b =>
       b.id === bookingId ? {
         ...b,
-        passengers: b.passenger.map((p, i) => ({ ...p, seat: seats[i] || null })),
+        passenger: b.passenger.map((p, i) => ({ ...p, seat: seats[i] || null })),
       } : b
     ));
     setModal(null);
@@ -154,7 +157,9 @@ const ManageBooking = () => {
 
               <div className="fc-actions">
                 <h4>Szybkie akcje</h4>
-                <button className="btn-primary"><img src={qrcodeIcon} alt="odprawa" className="btn-icon" /> Odprawa Online <span>›</span></button>
+                <button className="btn-primary" onClick={() => navigate('/odprawa', { state: { bookingId: booking.id } })}>
+                  <img src={qrcodeIcon} alt="odprawa" className="btn-icon" /> Odprawa Online <span>›</span>
+                </button>
                 
                 <button className="btn-outline" onClick={() => { setActiveBooking(booking); setModal('seats'); }}>
                   <img src={brightIcon} className="btn-icon" /> Wybierz miejsce
