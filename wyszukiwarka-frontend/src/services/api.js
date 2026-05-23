@@ -130,14 +130,78 @@ export const searchFlights = async (params) => {
   ]), 800));
 };
 
-export const loginUser = async (credentials) => {
-  // docelowo: return await api.post('/auth/login', credentials);
-  return new Promise((resolve) => setTimeout(() => resolve({ token: 'mock-jwt-token-123' }), 500));
+
+//przykładowi użytkownicy
+const MOCK_USERS = [
+  { id: 1, name: 'Jan Kowalski', email: 'jan@test.pl', password: 'haslo123' },
+];
+
+export const loginUser = async ({ email, password }) => {
+  await new Promise(res => setTimeout(res, 500));
+
+  const user = MOCK_USERS.find(u => u.email === email && u.password === password);
+  if (!user) throw { response: { data: { message: 'Nieprawidłowy email lub hasło' } } };
+
+  return { token: `mock-token-${user.id}` };
 };
 
-export const registerUser = async (userData) => {
-  // docelowo: return await api.post('/auth/register', userData);
-  return new Promise((resolve) => setTimeout(() => resolve({ success: true }), 500));
+export const registerUser = async ({ name, email, password, confirmPassword }) => {
+  await new Promise(res => setTimeout(res, 500));
+
+  if (!name || !email || !password)
+    throw { response: { data: { message: 'Wypełnij wszystkie pola' } } };
+
+  if (password !== confirmPassword)
+    throw { response: { data: { message: 'Hasła nie są zgodne' } } };
+
+  if (password.length < 8)
+    throw { response: { data: { message: 'Hasło musi mieć minimum 8 znaków' } } };
+
+  if (MOCK_USERS.find(u => u.email === email))
+    throw { response: { data: { message: 'Ten email jest już zajęty' } } };
+
+  MOCK_USERS.push({ id: Date.now(), name, email, password });
+  return { success: true };
+};
+
+//mocki rezerwacji 
+const MOCK_BOOKINGS = [
+  {
+    id: 'A92BCK',
+    status: 'confirmed',
+    airline: 'Wizz Air',
+    from: 'WAW', to: 'LTN',
+    timeFrom: '14:20', timeTo: '16:15',
+    duration: '1h 55m',
+    type: 'Bezpośredni',
+    passenger: [{ name: 'Jan Kowalski', type: 'Dorosły', initials: 'J', seat: null }],
+    takenSeats: ['1A', '1B', '2C', '3F', '5A', '5B', '5C', '5D', '5E', '5F', '7C', '8D', '10A', '12B'],
+    airlineInitial: 'W',   
+    points: '1,450',
+    baggage: 'Tylko mały plecak',
+    checkInDaysLeft: 10,
+  },
+  {
+    id: 'B31XYZ',
+    status: 'confirmed',
+    airline: 'LOT Polish Airlines',
+    from: 'KRK', to: 'CDG',
+    timeFrom: '08:00', timeTo: '10:30',
+    duration: '2h 30m',
+    type: 'Bezpośredni',
+    passengers:[{ name: 'Jan Kowalski', type: 'Dorosły', initials: 'J', seat: '14A' }],
+    takenSeats: ['14B'],
+    airlineInitial: 'L',    
+    points: '2,100',
+    baggage: 'Bagaż podręczny 10 kg',
+    checkInDaysLeft: 25,
+  },
+];
+
+export const getUserBookings = async () => {
+  await new Promise(res => setTimeout(res, 600));
+  return MOCK_BOOKINGS;
+  // docelowo: return await api.get('/bookings').then(r => r.data);
 };
 
 export default api;
