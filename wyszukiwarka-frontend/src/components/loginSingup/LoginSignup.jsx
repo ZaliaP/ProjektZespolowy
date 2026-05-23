@@ -26,7 +26,8 @@ const LoginSignup = () => {
     password: '',
     confirmPassword: '',
   });
-  
+
+  const [termsAccepted, setTermsAccepted] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
@@ -52,6 +53,11 @@ const LoginSignup = () => {
         login(response.token);
         navigate('/');
       } else {
+        if (action === 'Rejestracja' && !termsAccepted) {
+          setError('Musisz zaakceptować regulamin');
+          setLoading(false);
+          return;
+        }
         await registerUser(formData);
         setAction('Logowanie'); // Po udanej rejestracji zmień na logowanie
         alert('Konto zostało utworzone. Możesz się teraz zalogować.');
@@ -64,7 +70,7 @@ const LoginSignup = () => {
   };
 
   return (
-    <div className="container">
+    <div className="container" onKeyDown={(e) => e.key === 'Enter' && handleSubmit()}>
       <Link to="/" className="back-arrow" title="Powrót do strony głównej">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
           <line x1="19" y1="12" x2="5" y2="12"></line>
@@ -79,12 +85,11 @@ const LoginSignup = () => {
       </div>
 
       <div className="submit-container">
-        <button type="button" className={action==="Logowanie"?"submit gray":"submit"} onClick={() => {setAction('Logowanie')}}>Logowanie</button>
-        <button type="button" className={action==="Rejestracja"?"submit gray":"submit"} onClick={() => {setAction('Rejestracja')}}>Rejestracja</button>
+        <button type="button" className={action==="Logowanie"?"submit gray":"submit"} onClick={() => {setAction('Logowanie'); setError(null);}}>Logowanie</button>
+        <button type="button" className={action==="Rejestracja"?"submit gray":"submit"} onClick={() => {setAction('Rejestracja'); setError(null);}}>Rejestracja</button>
         </div>
 
         <div className={action === "Rejestracja" ? "inputs grid" : "inputs"}>
-          {error && <div className="error-message" style={{color: 'red', textAlign: 'center', marginBottom: '10px'}}>{error}</div>}
           
           {action === "Rejestracja" &&
             <div className="input">
@@ -124,7 +129,12 @@ const LoginSignup = () => {
 
         {action === "Rejestracja" ? 
           <div className="terms-checkbox">
-              <input type="checkbox" id="terms" />
+              <input
+                type="checkbox"
+                id="terms"
+                checked={termsAccepted}
+                onChange={e => setTermsAccepted(e.target.checked)}
+              />
               <label htmlFor="terms">Akceptuję <span>regulamin</span> oraz politykę <span>prywatności</span></label>
           </div>:
 
@@ -135,6 +145,8 @@ const LoginSignup = () => {
               </div>
               <span className="forgot">Zapomniałeś hasła?</span>
         </div>}
+
+        {error && <div className="error-message" style={{color: 'red', textAlign: 'center', marginTop: '20px'}}>{error}</div>}
 
         <button type="button" className="submit-button" onClick={handleSubmit} disabled={loading}>
           {loading ? "Wczytywanie..." : (action === "Logowanie" ? "Zaloguj się" : "Utwórz konto")}

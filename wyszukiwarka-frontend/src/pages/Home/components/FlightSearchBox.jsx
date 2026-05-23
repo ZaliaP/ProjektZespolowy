@@ -63,7 +63,7 @@ const FlightSearchBox = () => {
     const normalizedDest = dest.trim().toUpperCase();
 
     if (!normalizedOrigin || !normalizedDest) {
-      setErrorMessage('Uzupełnij lotnisko wylotu i przylotu.');
+      setErrorMessage('Uzupełnij miejsce wylotu i przylotu.');
       return;
     }
 

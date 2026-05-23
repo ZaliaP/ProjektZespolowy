@@ -58,8 +58,9 @@
 .flight-card {
   background-color: #ffffff;
   border-radius: 12px;
+  box-shadow: 0 2px 3px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
   overflow: hidden;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  margin-bottom: 10px;
 }
 
 .flight-card-header {
@@ -357,4 +358,26 @@
   .passenger-addons {
     flex-direction: column;
   }
+}
+
+.confirmation {
+  text-align: center;
+}
+
+.confirmation-icon {
+  font-size: 48px;
+  margin-bottom: 16px;
+}
+
+.confirmation h3 {
+  font-size: 20px;
+  font-weight: 700;
+  color: #111827;
+  margin: 0 0 12px 0;
+}
+
+.confirmation p {
+  color: #6b7280;
+  margin: 0 0 24px 0;
+  line-height: 1.5;
 }
