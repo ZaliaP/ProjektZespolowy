@@ -25,8 +25,8 @@ const Navbar = () => {
         
         <ul className="navbar-links">
           <li><NavLink to="/" end>Strona Główna</NavLink></li>
-          <li><a href="#">Oferty</a></li>
-          <li><a href="#">Odprawa</a></li>
+          <li><NavLink to="/oferty">Oferty</NavLink></li>
+          <li><NavLink to="/odprawa">Odprawa</NavLink></li>
           <li><NavLink to="/zarzadzaj-rezerwacja">Zarządzaj rezerwacją</NavLink></li>
         </ul>
 

@@ -189,7 +189,7 @@ const MOCK_BOOKINGS = [
     timeFrom: '08:00', timeTo: '10:30',
     duration: '2h 30m',
     type: 'Bezpośredni',
-    passengers:[{ name: 'Jan Kowalski', type: 'Dorosły', initials: 'J', seat: '14A' }],
+    passenger:[{ name: 'Jan Kowalski', type: 'Dorosły', initials: 'J', seat: '14A' }],
     takenSeats: ['14B'],
     airlineInitial: 'L',    
     points: '2,100',
